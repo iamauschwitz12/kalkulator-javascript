@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculator Js</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="home">
+        <div class="cal-utama">
+            <div class="cal-isi">
+                <div class="judul">
+                    <h3>Kalkulator</h3>
+                </div>
+                <div class="tampilan">
+                    <input type="text" class="display" disabled>
+                </div>
+                <div class="tombol">
+                    <div class="btn">
+                        <div class="angka">
+                            <button class="clear"><span>c</span></button>
+                            <button data-val="clear">←</button>
+                            <button data-val="()">()</button>
+                            <button data-val="*">x</button>
+                        </div>
+                        <div class="angka">
+                            <button data-val="7">7</button>
+                            <button data-val="8">8</button>
+                            <button data-val="9">9</button>
+                            <button data-val="/">÷</button>
+                        </div>
+                        <div class="angka">
+                            <button data-val="4">4</button>
+                            <button data-val="5">5</button>
+                            <button data-val="6">6</button>
+                            <button data-val="+">+</button>
+                        </div>
+                        <div class="angka">
+                            <button data-val="1">1</button>
+                            <button data-val="2">2</button>
+                            <button data-val="3">3</button>
+                            <button data-val="-">-</button>
+                        </div>
+                        <div class="angka">
+                            <button data-val=".">.</button>
+                            <button data-val="0">0</button>
+                            <button data-val=",">,</button>
+                            <button class="equals">=</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        const display = document.querySelector('.display'); 
+        const btn = document.querySelectorAll('button'); 
+        const clearButton = document.querySelector('.clear');
+
+        let currentInput = '';
+        let firstValue = ''; 
+        let operator = '';
+
+        btn.forEach(button => {
+            button.addEventListener('click', function(e) {
+                const val = e.target.getAttribute('data-val');
+                
+                if (!val && e.target.classList.contains('equals')) {
+                    if (firstValue && operator && currentInput) {
+                        firstValue = operate (firstValue, operator, currentInput).toString(); 
+                        display.value = firstValue;
+                        currentInput = '';
+                        operator = '';
+                    }
+                    return;
+                }
+                if (val >= '0' && val <= '9' || val === '.') {
+                    currentInput += val;
+                    display.value = currentInput;
+                } else {
+                    if (!operator && firstValue) {
+                        firstValue = operate (firstValue, operator, currentInput).toString();
+                        currentInput = '';
+                    } else if (!firstValue) {
+                        firstValue = currentInput; 
+                        currentInput = "";
+                    }
+                    operator = val;
+                }
+            });
+        });
+
+
+        clearButton.addEventListener('click', function() {
+            currentInput = '';
+            firstValue = ''; 
+            operator = '';
+            display.value = '';
+        });
+        
+        function operate (a, operator, b) {
+            a = parseFloat(a);
+            b = parseFloat(b);
+
+            switch (operator) { 
+                case '+':
+                    return a + b;
+            case '-':
+                    return a - b;
+            case '*':
+                    return a * b;
+            case '/':
+                    return b !== 0 ? a / b : 'Error';
+            default:
+                    return a;
+            }
+        }
+    </script>
+</body>
+</html>
